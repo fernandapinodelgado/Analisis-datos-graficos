@@ -1,0 +1,40 @@
+%% Código para hacer una media móvil y desviación estándar móvil
+% Por Fernanda Pino Delgado (2020).
+% INPUTS: 
+    % B = matriz de dos columnas, con el tiempo en la primera columna y los datos en la segunda columna.
+    % B = [tiempo datos]
+    % largoserie = largo de la ventana móvil en las unidades de tiempo de B(:,1).
+    % Ej: B está en días y quiero hacer una ventana móvil de 10 días. Entonces,
+    % largoserie = 10.
+% OUTPUTS:
+    % tiempomovil = nuevo vector tiempo para los datos móviles, que empieza
+    % largoserie/2 unidades después y termina largoserie/2 unidades antes 
+    % que el vector tiempo original.
+    % mediamovil = media móvil, que tendrá el largo de (B-largoserie).
+    % desviacion = desviación móvil, que tendrá el largo (B-largoserie).
+
+function[tiempomovil,mediamovil,desviacion] = DatosMoviles(B,largoserie)
+
+  for i = 1:length(B)-largoserie
+    mediamovil(i) = mean(B(i:i+largoserie,2)) ;
+    desviacion(i) = std(B(i:i+largoserie,2)) ;
+  end
+    
+  mediamovil = mediamovil';
+  desviacion = desviacion';
+  
+  % Hacer un vector tiempo nuevo para que calce con el de la mediamovil
+  diferenciatamano = size(B(:,2),1) - size(mediamovil,1);
+  tiempomovil = B((diferenciatamano+1)/2 : end - (diferenciatamano+1)/2 ,1);
+  % Notar que ahora tiempomovil es del mismo largo que mediamovil y que desviacion
+  
+  % Graficando la media móvil y la desviación estándar móvil positiva y negativa.
+  hold on
+   plot(B(:,1),B(:,2),'k','linewidth',1)
+   plot(tiempomovil,mediamovil,'r','linewidth',1)
+   plot(tiempomovil,mediamovil-desviacion,'b','linewidth',1)
+   plot(tiempomovil,mediamovil+desviacion,'b','linewidth',1)
+   grid on
+  hold off
+end
+ 
